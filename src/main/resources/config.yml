@@ -1,0 +1,81 @@
+# ===================== FakePlayers 假人插件配置 =====================
+# 撑排面：服务器列表在线人数虚高 + Tab 列表塞假人（随机皮肤 + 假 Ping + 随机上下线）
+#
+# 说明：
+#   enabled      - 插件总开关
+#   count        - 假人池总数（管理员可用 /假人 数量 <N> 动态调整，默认读这里）
+#   custom-names - 自定义假人名字（可选）。格式 "编号: 名字"（编号任意，不固定）
+#                  填了几个就用几个，不足的部分自动随机生成英文 ID 补足。
+#                  ⚠ Minecraft 玩家名不能用中文，只能字母/数字/下划线。
+#   use-skin     - true=随机套用真实皮肤；false=默认史蒂夫皮肤
+#
+#   [服务器列表 MOTD]
+#   motd-boost       - true=在线人数虚高（真实玩家 + 在线假人）
+#   motd-extra       - 最大人数额外留的空位（避免列表显示"满员"）
+#   motd-show-names  - true=悬停时显示假人名字和皮肤（数字和名单对齐，防露馅）
+#
+#   [动态表现]
+#   ping-jitter          - true=假人 ping 动态跳动（更像真人）
+#   ping-jitter-interval - ping 跳动间隔（秒）
+#
+#   [假人随机进出服]（默认开启，想关就 simulate-join: false）
+#   simulate-join          - true=假人随机进出服（Tab 人数动态变化）
+#   simulate-interval-min  - 每轮进出间隔下限（秒）：间隔随机在 [min,max] 之间，不固定
+#   simulate-interval-max  - 每轮进出间隔上限（秒）：想很随机可设 1~1000，想固定就 min=max
+#   simulate-out-min/max   - 每轮"下线"几个假人（默认 1~2，太多会假）
+#   simulate-in-min/max    - 每轮"上线"几个假人（默认 1~2）
+#   online-min             - 在线假人数下限（下线不会低于这个数）
+#   join-message           - true=假人进出服时聊天框显示"XXX加入了游戏/离开了游戏"
+#
+#   [健壮性]
+#   avoid-real-names - true=假人名字避开当前在线真实玩家（防重名）
+#
+#   [孤独玩家搭话]（默认开启）
+#   当服务器只有 1 个真实玩家、且他进服玩了一会后，随机一个假人向他发一条"闲谈"。
+#   两个及以上真实玩家则不发；同一玩家在冷却期内不会重复收到。
+#   lonely-chat                  - 总开关（默认 true）
+#   lonely-chat-delay-min/max    - 进服后延迟多久触发（秒），随机在 [min,max] 之间
+#   lonely-chat-cooldown-days    - 冷却天数（该玩家这几天内只发一次）
+#   lonely-chat-messages         - 搭话台词列表（可增删改，随机发其中一条）
+fake-players:
+  enabled: true
+  count: 2
+  custom-names:
+    "1": "zhangsan"
+    "2": "lisi"
+    "3": "wangwu"
+  ping-min: 20
+  ping-max: 150
+  use-skin: true
+
+  motd-boost: true
+  motd-extra: 10
+  motd-show-names: true
+
+  ping-jitter: true
+  ping-jitter-interval: 10
+
+  simulate-join: true
+  simulate-interval-min: 1800
+  simulate-interval-max: 7200
+  simulate-out-min: 1
+  simulate-out-max: 2
+  simulate-in-min: 1
+  simulate-in-max: 2
+  online-min: 15
+  join-message: true
+
+  avoid-real-names: true
+
+  lonely-chat: true
+  lonely-chat-delay-min: 1200
+  lonely-chat-delay-max: 3800
+  lonely-chat-cooldown-days: 1
+  lonely-chat-messages:
+    - "你在哪？？？？？？？"
+    - "你好，你能借我3个钻石吗？"
+    - "这服好冷清啊"
+    - "这里钓鱼还不错哎"
+    - "这里钓鱼真的不错，哈哈哈"
+    - "找本书先"
+    - "哪里有村庄？？？"
