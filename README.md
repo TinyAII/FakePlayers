@@ -1,128 +1,109 @@
-# FakePlayers 假人插件
+# 假人插件 FakePlayers
 
-> 撑排面专用：让服务器「看起来」人气旺。零依赖，纯发包，不吃服务器性能。
+> Tab 假人 + 随机皮肤 + 假 Ping + MOTD 虚高 + 孤独搭话 + 随机上下线 + 防重名，零依赖撑排面。MIT 开源。
 
-服务器人少冷清？装上这个插件，Tab 列表自动出现一批「假玩家」——随机英文 ID、真实皮肤、假 Ping，服务器列表在线人数虚高，甚至在你独自一人时，还会有「假人」主动找你搭话。
+小服"撑排面"利器：给 Tab 列表塞假人（随机英文 ID + 内置 23 张皮肤 + 假 Ping），MOTD 在线人数虚高让小服看起来热闹；单人在线时假人随机闲谈台词缓解冷清；假人还会随机上下线配合 join 提示。
 
----
-
-## 功能
-
-| 功能 | 说明 |
-| --- | --- |
-| 🧑‍🤝‍🧑 Tab 列表假人 | 随机英文 ID + 内置 23 个真实玩家皮肤 + 假 Ping（绿格随机） |
-| 📡 MOTD 在线人数虚高 | 服务器列表显示「真实玩家 + 假人」，悬停还能看到假人名字和皮肤头像 |
-| 🔄 假人随机上下线 | 低频随机进出（默认 30 分钟~2 小时一轮），聊天框显示「XXX加入了游戏/离开了游戏」 |
-| 📶 假 Ping 动态跳动 | 假人延迟自动上下浮动，更像真人 |
-| 💬 孤独玩家搭话 | 当你独自在线玩了一会，随机一个假人找你搭话（默认 20 分钟~1 小时触发，1 天冷却） |
-| 🛡️ 防重名 | 假人名字自动避开在线真实玩家 |
-
-**核心特点：零依赖、无 ProtocolLib 前置，纯发包实现，假人不占实体、不吃内存、不进世界。**
+- 🕹 **Tab 假人**：往 Tab 列表塞 N 个假人，名字随机英文 ID（可配置自定义 `1:zhangsan` `2:lisi` ...），不与真玩家重名
+- 🎨 **随机皮肤**：内置 23 张预设皮肤 textures，每个假人随机分一张，Tab 显示头像（不依赖在线皮肤服务）
+- 📡 **假 Ping**：每个假人显示一个 1~999 ms 随机 ping，跳着变化更像真人
+- 📈 **MOTD 虚高**：MOTD 在线人数 = 真人 + 假人 + 额外数（可调）；悬停显示在线名单（含假人）
+- 💬 **孤独搭话**：服务器只 1 个真人玩家时，每隔一段时间随机一个假人发一句闲谈台词（只算真人）
+- 🔄 **随机上下线**：可开关；假人间隔 30 分钟~2 小时随机上下线（1~2 个），并配合 join 提示
+- 🛡 **防重名**：假人 ID 与真玩家撞名时自动加后缀
+- 🎨 品牌横幅 TinyAII；**MIT 开源**
 
 ---
 
 ## 安装
 
 1. 下载 `fakeplayers-1.0.0.jar`
-2. 放入服务器 `plugins/` 目录
-3. 重启服务器（或 `/reload`）
+2. 放入 `plugins/`，重启
+3. `/假人 数量 <N>` 设假人数（OP 权限 `fakeplayers.admin`）
 
-启动后控制台出现 TinyAII 像素字横幅即加载成功。
+## 命令
 
-## 命令（仅 OP）
+别名：`/假人`、`/fp`、`/fakeplayer`、`/jr`
 
 | 命令 | 说明 |
-| --- | --- |
-| `/假人 数量 <N>` | 设置假人池数量并刷新（0~200） |
-| `/假人 开` / `/假人 关` | 开启 / 关闭假人 |
-| `/假人 重载` | 重载 config.yml |
-| `/假人 列表` | 查看当前在线假人 |
+|---|---|
+| `/假人 数量 <N>` | 设置假人数量（0=关闭假人） |
+| `/假人 开` / `/假人 关` | 开关假人 |
+| `/假人 重载` | 重载配置 |
+| `/假人 列表` | 列出当前假人 |
 
-## 配置
-
-配置文件 `plugins/FakePlayers/config.yml`，全部可调：
+## 配置（`plugins/FakePlayers/config.yml`）
 
 ```yaml
 fake-players:
-  enabled: true          # 插件总开关
-  count: 2               # 假人池总数
-  use-skin: true         # 真实皮肤 / 史蒂夫
-  ping-min: 20           # 假 Ping 下限（毫秒）
-  ping-max: 150          # 假 Ping 上限
-  custom-names:          # 自定义假人名字（编号随便写）
-    "1": "zhangsan"
-    "2": "lisi"
-
-  motd-boost: true       # MOTD 在线人数虚高
-  motd-extra: 10         # 最大人数额外空位
-  motd-show-names: true  # 悬停显示假人名单
-
-  ping-jitter: true      # 假 Ping 跳动
-  ping-jitter-interval: 10
-
-  simulate-join: true    # 假人随机上下线
-  simulate-interval-min: 1800   # 进出间隔下限（秒）
-  simulate-interval-max: 7200   # 进出间隔上限（秒）
-  simulate-out-min: 1    # 每轮下线 1~2 个
-  simulate-out-max: 2
-  simulate-in-min: 1     # 每轮上线 1~2 个
-  simulate-in-max: 2
-  online-min: 15         # 在线假人下限
-  join-message: true     # 进出服聊天提示
-
-  avoid-real-names: true # 防重名
-
-  lonely-chat: true      # 孤独玩家搭话
-  lonely-chat-delay-min: 1200  # 搭话延迟下限（秒）
-  lonely-chat-delay-max: 3800  # 搭话延迟上限（秒）
-  lonely-chat-cooldown-days: 1 # 冷却天数
-  lonely-chat-messages:        # 搭话台词
-    - "你在哪？？？？？？？"
-    - "你好，你能借我3个钻石吗？"
-    - "这服好冷清啊"
+  count: 2                 # 假人数量
+  enabled: true            # 是否启用
+  ping:
+    min: 1
+    max: 999
+  name-format:
+    random: true           # true=随机英文ID; false=用 custom 列表
+    custom:
+      "1": "zhangsan"      # "1" 是顺序号（不固定），对应那个假人的名字
+      "2": "lisi"
+motd:
+  extra: 10                # MOTD 在线人数额外加这么多
+  online-min: 15           # MOTD 显示在线下限
+  hover-list: true         # 悬停显示在线名单（含假人）
+lonely-chat:
+  enabled: true            # 孤独搭话开关
+  delay-min: 1200          # 触发延迟区间下限（秒，20分钟）
+  delay-max: 3800           # 上限（约1小时）
+  cooldown-days: 1          # 每玩家每天冷却
+  lines:
+    - "今天也来挖矿吗？"
+    - "你听说了吗？"
+    - ...（共7条）
+simulate-join:
+  enabled: true            # 随机上下线开关
+  interval-min: 1800       # 间隔区间（秒，30分钟）
+  interval-max: 7200       # 上限（2小时）
+  per-cycle: 1            # 每轮上下线数量
 ```
+
+## 实现原理（开源可读）
+
+- `FakePlayersPlugin`：主类，假人列表管理 + scheduler 定时发"假人上下线 / ping 更新 / 孤独搭话"包 + 命令分发
+- `NmsUtil`：**反射**构造 `ClientboundPlayerInfoUpdatePacket`（ADD_PLAYER / UPDATE_LATENCY 等 action）与 `ClientboundPlayerInfoRemovePacket`，把假人塞进 Tab 列表——通过反射拿 `net.minecraft.network.protocol.game.*` 内部类，**适配 Paper 1.21.8 包路径**（不同版本包名变化需重编译）
+- `SkinPool`：内置 23 个预选皮肤 textures（Base64 注入 GameProfile.properties 供 Tab 显示头像）
+- `NameGenerator`：随机英文 ID 或从配置自定义名字（sanitize：只留 `[a-zA-Z0-9_]`、长度 3~16）
 
 ## 兼容
 
-- **Paper 1.21.8**（及其下游 Purpur / Leaves 1.21.8）
-- Java 17+
-- ⚠️ 使用了 Paper 专有 API + 锁版 NMS 反射，**不支持 Spigot / 其他 MC 版本**
+- **Paper 1.21.8**（用了反射访问 `net.minecraft.network.protocol.game` 内部类锁版本；不同 MC 版本需重编译）
+- Java 21
+- 零依赖（authlib 由服务端提供）
 
-## 技术亮点
+## 开源许可
 
-- 零依赖、无 ProtocolLib 前置
-- 纯发包（PlayerInfo 包）实现，假人不进世界、不占实体
-- 假人皮肤 UUID 对齐 Mojang 签名，皮肤能正常渲染
+**MIT License** — Copyright (c) 2026 TinyAII。源码见 `src/main/java/com/mcadmin/fakeplayers/`，可自由使用/修改/分发，请保留版权与许可声明。
 
 ---
 
 # FakePlayers (English)
 
-Make your server *look* popular. Zero dependencies, pure packet-based, almost no performance cost.
+Fake players for Tab list with random skins, fake ping, MOTD inflation, lonely-chat, random join/quit. MIT open source, zero deps.
 
 ## Features
+- N fake players in Tab with random English IDs (or custom names) + 23 built-in skins + fake ping
+- MOTD online count inflated (+extra, min shown); hover list shows fake players
+- Lonely-chat: single real player → fake player sends a chat line every 20min~1hour
+- Random join/quit (1~2 fakes, 30min~2h interval) + join messages
+- Anti-name-collision (auto suffix on collision with real players)
 
-- Fake players in Tab list (random English IDs + 23 real skins + fake ping)
-- MOTD online count inflation + hover player list
-- Randomized fake join/quit (low frequency) with join/leave chat messages
-- Fake ping jitter
-- "Lonely player" chat: a fake player sends you a random message when you're alone
-- Avoid name collision with real players
-
-## Install
-
-Drop `fakeplayers-1.0.0.jar` into `plugins/`, restart.
-
-## Commands (OP only)
-
-`/假人 数量 <N>` · `/假人 开|关` · `/假人 重载` · `/假人 列表`
+## Commands
+`/假人 数量 <N>`, `/假人 开|关`, `/假人 重载`, `/假人 列表`. Alias: `/fp`, `/fakeplayer`, `/jr`. Permission: `fakeplayers.admin`.
 
 ## Compatibility
+**Paper 1.21.8** (reflection into `net.minecraft.network.protocol.game` locks version), Java 21, zero dependencies (authlib provided by server).
 
-- Paper 1.21.8 (and forks: Purpur / Leaves 1.21.8)
-- Java 17+
-- ⚠️ Paper-only API + version-locked NMS reflection. Not for Spigot / other MC versions.
+## License
+**MIT** — Copyright (c) 2026 TinyAII. Source in `src/`. Free to use/modify/distribute; keep the copyright notice.
 
 ## Author
-
-TinyAII · 免费开源 · 零依赖
+TinyAII · MIT 开源 · 零依赖
