@@ -1,0 +1,15 @@
+name: FakePlayers
+version: 1.0.0
+main: com.mcadmin.fakeplayers.FakePlayersPlugin
+api-version: "1.16"
+author: TinyAII
+description: 假人插件 - 撑排面，Tab 列表塞假人（随机皮肤+假 Ping）
+commands:
+  fakeplayer:
+    description: 假人插件管理命令
+    aliases: [fp, 假人, jr]
+    usage: /假人 <数量|开|关|重载|列表>
+permissions:
+  fakeplayers.admin:
+    description: 假人插件管理权限
+    default: op
